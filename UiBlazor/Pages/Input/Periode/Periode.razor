@@ -1,0 +1,55 @@
+﻿@page "/createPeriode"
+@using Core.Model
+@using Share.DTO
+@inject ISnackbar Snackbar
+@inject IPeriodeService  periodeService
+<PageTitle>period</PageTitle>
+<div class="card">
+    <div class="card-body">
+         <EditForm Model="period" OnValidSubmit="create">
+    <div class="form-group">
+        <label>
+        Name:
+        </label>
+            <InputText @bind-Value="period.Name" class="form-control"></InputText>
+
+     </div>
+            <br />
+    <div class="form-group">
+    <label>
+            BeginTime:
+        </label>
+           <input type="time" @bind="period.FromDate" @bind:format="HH:mm"/>
+
+    </div
+    <div class="form-group">
+    <label>
+            EndTime:
+        </label>
+           <input type="time" @bind="period.ToDate" @bind:format="HH:mm"/>
+
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+    </div>
+    </div>
+@code {
+    PeroidModel period = new PeroidModel();
+
+    async Task create()
+    {
+        var result= await  periodeService.Create(period);
+        if (result.Code == 0)
+        {
+            Snackbar.Add("Create Periode Seccess", Severity.Success);
+            period = new PeroidModel();
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error When Create Periode", Severity.Error);
+        }
+
+    }
+}

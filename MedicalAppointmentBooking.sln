@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{66AC7C38-6230-4DF2-90F4-83A8BFCDCB56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{66AC7C38-6230-4DF2-90F4-83A8BFCDCB56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{1048201B-E2F5-4ED3-839A-5D7C38594C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{1048201B-E2F5-4ED3-839A-5D7C38594C76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C88BE12B-4BD4-4AFD-9097-85D17995CDF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C88BE12B-4BD4-4AFD-9097-85D17995CDF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UiBlazor", "UiBlazor\UiBlazor.csproj", "{252B7D74-6B54-4F77-9117-0D461CF10127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UiBlazor", "UiBlazor\UiBlazor.csproj", "{252B7D74-6B54-4F77-9117-0D461CF10127}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{4AE35E41-A295-4FB1-AE23-C9F69F9AAFE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "Share\Share.csproj", "{D2E02F96-BC65-456C-A34C-E3CCDD64C855}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{252B7D74-6B54-4F77-9117-0D461CF10127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{252B7D74-6B54-4F77-9117-0D461CF10127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{252B7D74-6B54-4F77-9117-0D461CF10127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE35E41-A295-4FB1-AE23-C9F69F9AAFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE35E41-A295-4FB1-AE23-C9F69F9AAFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE35E41-A295-4FB1-AE23-C9F69F9AAFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE35E41-A295-4FB1-AE23-C9F69F9AAFE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E02F96-BC65-456C-A34C-E3CCDD64C855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2E02F96-BC65-456C-A34C-E3CCDD64C855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2E02F96-BC65-456C-A34C-E3CCDD64C855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2E02F96-BC65-456C-A34C-E3CCDD64C855}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

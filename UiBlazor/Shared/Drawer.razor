@@ -1,0 +1,42 @@
+﻿@inject NavigationManager navigationManager
+
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudSpacer />
+      <MudLink Href="/Login">  <MudText Style="color:azure;margin:15px" >Login</MudText></MudLink>
+
+         <MudLink Href="/register">  <MudText Style="color:azure" >Register</MudText></MudLink>
+    </MudAppBar>
+    <MudDrawer @bind-Open="@open" Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">My App</MudText>
+        </MudDrawerHeader>
+       <MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Servers</MudNavLink>
+    <MudNavGroup Title="Inputs" Expanded="true">
+        <MudNavLink Href="/periodeIndex"  Match="NavLinkMatch.Prefix">Period</MudNavLink>
+        <MudNavLink Href="/medicalIndex"  Match="NavLinkMatch.Prefix">Medical</MudNavLink>
+         <MudNavLink Href="/Specialization"  Match="NavLinkMatch.Prefix">Specialization</MudNavLink>
+        <MudNavLink Href="/Doctor"  Match="NavLinkMatch.Prefix">Doctor</MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
+</MudNavMenu>
+    </MudDrawer>
+
+  
+
+
+@code {
+    bool open = false;
+
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+
+    void NavToRegister()
+    {
+        navigationManager.NavigateTo("Login");
+    }
+}

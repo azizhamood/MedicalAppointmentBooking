@@ -1,0 +1,49 @@
+﻿@page "/register"
+S
+<PageTitle>Register</PageTitle>
+<div class="card">
+    <div class="card-body">
+        <EditForm Model="registerinfo" OnValidSubmit="registeration">
+            <div class="form-group">
+                <label>
+                    Email:
+                </label>
+                <InputText @bind-Value="registerinfo.Email" class="form-control"></InputText>
+
+            </div>
+            <br/>
+            <div class="form-group">
+                <label>
+                    UserName:
+                </label>
+                <InputText @bind-Value="registerinfo.UserName" class="form-control"></InputText>
+
+            </div>
+            <br />
+            <div class="form-group">
+                <label>
+                    Password:
+                </label>
+                <InputText @bind-Value="registerinfo.Password" type="password" class="form-control"></InputText>
+
+            </div>
+            <br />
+            <div class="form-group">
+                <label>
+                     Confirm Password:
+                </label>
+                <InputText @bind-Value="registerinfo.ConfirmPassword" type="password" class="form-control"></InputText>
+
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Register</button>
+        </EditForm>
+    </div>
+</div>
+@code {
+    UserRegisterDto registerinfo = new UserRegisterDto();
+    void registeration()
+    {
+
+    }
+}

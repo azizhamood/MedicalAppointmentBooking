@@ -1,4 +1,4 @@
-﻿namespace Infrastructure
+﻿namespace Share
 {
     public class Class1
     {

@@ -9,7 +9,7 @@ namespace Core.Model
     public class BaseModel
     {
         public int Id { get; set; }
-        public DateTime AddDate { get; set; }
+      //  public DateTime AddDate { get; set; }
 
     }
 }
