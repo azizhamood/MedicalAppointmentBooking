@@ -1,0 +1,42 @@
+﻿@page "/createSpecialization"
+@using Core.Model
+@using Share.DTO
+@inject ISnackbar Snackbar
+@inject ISpecializationService SpecializationService
+<PageTitle>period</PageTitle>
+<div class="card">
+    <div class="card-body">
+         <EditForm Model="categoryModel" OnValidSubmit="create">
+    <div class="form-group">
+        <label>
+        Name:
+        </label>
+            <InputText @bind-Value="categoryModel.Name" class="form-control"></InputText>
+
+     </div>
+            <br />
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+    </div>
+    </div>
+@code {
+    CategoryModel categoryModel = new CategoryModel();
+
+    async Task create()
+    {
+        var result = await SpecializationService.Create(categoryModel);
+        if (result.Code == 0)
+        {
+            Snackbar.Add("Create Periode Seccess", Severity.Success);
+            categoryModel = new CategoryModel();
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error When Create Periode", Severity.Error);
+        }
+
+    }
+}

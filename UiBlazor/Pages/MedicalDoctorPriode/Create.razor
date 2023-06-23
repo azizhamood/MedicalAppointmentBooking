@@ -1,0 +1,95 @@
+﻿@page "/createDMP"
+@using Core.Model
+@using Share.DTO
+@inject ISnackbar Snackbar
+@inject IDoctorService doctorService
+@inject IMedicalService medicalServoce
+@inject IPeriodeService periodeService
+@inject IMDPService MDPService
+<PageTitle>Doctor</PageTitle>
+<div class="card">
+    <div class="card-body">
+         <EditForm Model="DMP" OnValidSubmit="create">
+   
+       <div class="form-group">
+
+          <MudSelect T="int" Label="Doctor" @bind-Value="DMP.DoctorId">
+
+                    @foreach (var doctor in doctors)
+                    {
+                                    <MudSelectItem T="int" Value="@doctor.Id"> @doctor.Name </MudSelectItem>
+                    }
+
+
+            </MudSelect>
+
+             <MudSelect T="int" Label="Medical" @bind-Value="DMP.MedicalId">
+
+                    @foreach (var medical in medicals)
+                    {
+                       <MudSelectItem T="int" Value="@medical.Id"> @medical.Name </MudSelectItem>
+                    }
+
+
+            </MudSelect>
+
+             <MudSelect T="int" Label="Period" @bind-Value="DMP.PeroidId">
+
+                    @foreach (var peroid in peroids)
+                    {
+                                        <MudSelectItem T="int" Value="@peroid.Id"> @peroid.Name </MudSelectItem>
+                    }
+
+
+            </MudSelect>
+      </div>
+
+            <br/>
+         <div class="form-group">
+        <label>
+        Count Book:
+        </label>
+            <InputText  @bind-Value="countBook" class="form-control"></InputText>
+
+     </div>
+     <br/>
+       <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+    </div>
+    </div>
+@code {
+    DoctorMedicalPeriodModel DMP = new DoctorMedicalPeriodModel();
+
+    IEnumerable<DoctorModel> doctors = new List<DoctorModel>();
+    IEnumerable<MedicalModel> medicals = new List<MedicalModel>();
+    IEnumerable<PeroidModel> peroids = new List<PeroidModel>();
+
+    string countBook = "1";
+    protected async override Task OnInitializedAsync()
+    {
+        var getdoctors = await doctorService.GetAll();
+        var getmedical = await medicalServoce.GetAll();
+        var getpreiode = await periodeService.GetAll();
+        doctors = (getdoctors.Code == 0) ? getdoctors.Content : new List<DoctorModel>();
+        medicals = (getmedical.Code == 0) ? getmedical.Content : new List<MedicalModel>();
+        peroids = (getpreiode.Code == 0) ? getpreiode.Content : new List<PeroidModel>();
+
+    }
+    async Task create()
+    {
+        DMP.CountBook = Int16.Parse(countBook);
+        var result = await MDPService.Create(DMP);
+
+        if (result.Code == 0)
+        {
+            Snackbar.Add("Create  Seccess", Severity.Success);
+            DMP = new DoctorMedicalPeriodModel();
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error When Medical Periode", Severity.Error);
+        }
+
+    }
+}

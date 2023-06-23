@@ -51,6 +51,18 @@ namespace Infrastructure.Services
             return await _dbContext.Set<T>().ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAll(string[] incloud)
+        {
+            if (incloud.Length == 3)
+                return await _dbContext.Set<T>().Include(incloud[0]).Include(incloud[1]).Include(incloud[2]).ToListAsync();
+            else if (incloud.Length == 1)
+                return await _dbContext.Set<T>().Include(incloud[0]).ToListAsync();
+            else
+                return await _dbContext.Set<T>().ToListAsync();
+
+               
+        }
+
         public async Task<bool> UpdateAsync(T entity)
         {
             try

@@ -1,0 +1,65 @@
+﻿@page "/createDoctor"
+@using Core.Model
+@using Share.DTO
+@inject ISnackbar Snackbar
+@inject IDoctorService doctorService
+@inject ISpecializationService specializationService
+<PageTitle>Doctor</PageTitle>
+<div class="card">
+    <div class="card-body">
+         <EditForm Model="doctor" OnValidSubmit="create">
+    <div class="form-group">
+        <label>
+        Name:
+        </label>
+            <InputText @bind-Value="doctor.Name" class="form-control"></InputText>
+
+     </div>
+     <div class="form-group">
+       
+        <MudSelect T="int" Label="Specialization" @bind-Value="doctor.CategoryId">
+               
+                    @foreach (var category in categorys)
+                    {
+                                <MudSelectItem T="int" Value="@category.Id"> @category.Name </MudSelectItem>
+                    }
+                
+                
+            </MudSelect>
+      </div>
+
+            <br/>
+       <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+    </div>
+    </div>
+@code {
+    DoctorModel doctor = new DoctorModel();
+
+    IEnumerable<CategoryModel> categorys = new List<CategoryModel>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var result = await specializationService.GetAll();
+        if (result.Code == 0)
+        {
+            categorys = result.Content;
+        }
+    }
+    async Task create()
+    {
+        var result = await doctorService.Create(doctor);
+
+        if (result.Code == 0)
+        {
+            Snackbar.Add("Create Medical Seccess", Severity.Success);
+            doctor = new DoctorModel();
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error When Medical Periode", Severity.Error);
+        }
+
+    }
+}

@@ -12,6 +12,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<IPeriodeService, PeriodeService>();
 builder.Services.AddScoped<IMedicalService, MedicalService>();
+builder.Services.AddScoped<ISpecializationService, SpecializationService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IMDPService, DMPService>();
 builder.Services.AddScoped(sp => new HttpClient(new CustomHttpMessageHandler()) { BaseAddress = new Uri(builder.Configuration["ApiUri"], UriKind.Absolute) });
 
 builder.Services.AddMudServices();

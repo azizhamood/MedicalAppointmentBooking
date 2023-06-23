@@ -1,9 +1,8 @@
-﻿
-using Api.Model;
+﻿using Api.Model;
 using Application.Futures.Doctor.Command;
 using Application.Futures.Doctor.Queries;
-using Application.Futures.Periode.Queries;
-using Core.Constaince;
+using Application.Futures.DoctorMedicalPeriod.Command;
+using Application.Futures.DoctorMedicalPeriod.Queries;
 using Core.Exceptions;
 using Core.Model;
 using MediatR;
@@ -16,38 +15,38 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctoController : ControllerBase
+    public class MedicalDoctorPriodeController : ControllerBase
     {
-
-        private IMediator _mediator;
-        public DoctoController(IMediator mediator) {
-            _mediator= mediator;
-        }    
-        // GET: api/<DoctoController>
+        private readonly IMediator _mediator;
+        public MedicalDoctorPriodeController(IMediator mediator)
+        {
+            _mediator=mediator;
+        }
+        // GET: api/<MedicalDoctorPriodeController>
         [HttpGet]
         public async Task<ResponseModel> Get()
         {
-            var reuslt = await _mediator.Send(new GetAllDoctors());
+            var reuslt = await _mediator.Send(new GetAllDMP());
             return new ResponseModel(reuslt);
         }
 
-        // GET api/<DoctoController>/5
+        // GET api/<MedicalDoctorPriodeController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<DoctoController>
+        // POST api/<MedicalDoctorPriodeController>
         [HttpPost]
-        public async Task<ResponseModel> Post([FromBody] DoctorModel doctor)
+        public async Task<ResponseModel> Post([FromBody] DoctorMedicalPeriodModel MDP)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return new ResponseModel(500, ModelState.ToString());
 
-                var result = await _mediator.Send(new CreateDoctor() { Doctor=doctor });
+                var result = await _mediator.Send(new CreateDMP() { DoctorMedicalPeriod = MDP });
                 return new ResponseModel(result);
             }
             catch (MABException ex)
@@ -62,13 +61,13 @@ namespace Api.Controllers
             }
         }
 
-        // PUT api/<DoctoController>/5
+        // PUT api/<MedicalDoctorPriodeController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<DoctoController>/5
+        // DELETE api/<MedicalDoctorPriodeController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

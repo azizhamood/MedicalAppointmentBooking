@@ -1,0 +1,42 @@
+﻿@page "/specializationIndex"
+@using System.Net.Http.Json
+@inject HttpClient httpClient
+@inject ISpecializationService specializationService
+@inject NavigationManager navigationManager
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" OnClick="NavTocreate" Style="margin:20px">Create</MudButton>
+
+<MudDataGrid T="CategoryModel" Items="Categories"  EditMode="DataGridEditMode.Form"
+    
+    Bordered="true" Dense="true" >
+    <Columns>
+        <PropertyColumn Property="x => x.Name" Title="Name" IsEditable="false" />
+    </Columns>
+</MudDataGrid>
+
+
+
+
+@code {
+    private IEnumerable<CategoryModel> Categories = new List<CategoryModel>();
+    private bool _readOnly;
+    private bool _isCellEditMode;
+    private List<string> _events = new();
+    private bool _editTriggerRowClick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await specializationService.GetAll();
+        if (result.Code == 0)
+        {
+            Categories = result.Content;
+            StateHasChanged();
+        }
+    }
+
+    // events
+   
+    void NavTocreate()
+    {
+        navigationManager.NavigateTo("/createSpecialization");
+    }
+}

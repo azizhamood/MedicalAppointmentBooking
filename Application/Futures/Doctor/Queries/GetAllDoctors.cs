@@ -23,7 +23,7 @@ namespace Application.Futures.Doctor.Queries
         }
         public async Task<IEnumerable<DoctorModel>> Handle(GetAllDoctors request, CancellationToken cancellationToken)
         {
-            return  await _baseRepository.GetAll();
+            return  await _baseRepository.GetAll(new[] { "Category" } );
         }
     }
 }

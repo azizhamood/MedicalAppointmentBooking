@@ -14,5 +14,6 @@ namespace Application.Interface
         Task<IEnumerable<T>> Get(Func<T, bool> expration);
 
         Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAll( string[] incloud );
     }
 }

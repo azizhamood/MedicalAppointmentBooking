@@ -1,0 +1,75 @@
+﻿@page "/docroeIndex"
+@using System.Net.Http.Json
+@inject HttpClient httpClient
+@inject IDoctorService doctorService
+@inject ISpecializationService specializationService
+@inject NavigationManager navigationManager
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" OnClick="NavTocreate" Style="margin:20px">Create</MudButton>
+
+<MudDataGrid T="DoctorModel" Items="doctors"  EditMode="DataGridEditMode.Form"
+   
+    Bordered="true" Dense="true" EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
+    <Columns>
+        <PropertyColumn Property="x => x.Name" Title="Name" IsEditable="false" />
+
+        
+         <PropertyColumn Property="x => x.Category.Name" Title="Specialization">
+            <EditTemplate>
+                 <MudSelect T="int" @bind-Value="context.Item.CategoryId"  Label="" >
+                    @foreach (var category in categories)
+                    {
+                              <MudSelectItem T="int" Value="@category.Id"> @category.Name </MudSelectItem>
+                    }
+
+                 </MudSelect>
+            </EditTemplate>
+
+        </PropertyColumn>
+    </Columns>
+</MudDataGrid>
+
+
+
+
+
+@code {
+    private IEnumerable<DoctorModel> doctors = new List<DoctorModel>();
+    private IEnumerable<CategoryModel> categories = new LinkedList<CategoryModel>();
+    private bool _readOnly;
+    private bool _isCellEditMode;
+    private List<string> _events = new();
+    private bool _editTriggerRowClick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var getCategories = await specializationService.GetAll();
+        categories = (getCategories.Code == 0) ? getCategories.Content : new List<CategoryModel>();
+        var result = await doctorService.GetAll();
+        if (result.Code == 0)
+        {
+            doctors = result.Content;
+            StateHasChanged();
+        }
+    }
+
+    // events
+    void StartedEditingItem(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CommittedItemChanges(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void NavTocreate()
+    {
+        navigationManager.NavigateTo("/createDoctor");
+    }
+}

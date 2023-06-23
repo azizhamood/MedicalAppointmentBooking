@@ -1,0 +1,111 @@
+﻿@page "/DMPIndex"
+@using System.Net.Http.Json
+@inject IDoctorService doctorService
+@inject IMedicalService medicalServoce
+@inject IPeriodeService periodeService
+@inject HttpClient httpClient
+@inject IMDPService MDPService
+@inject NavigationManager navigationManager
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" OnClick="NavTocreate" Style="margin:20px">Create</MudButton>
+
+<MudDataGrid T="DoctorMedicalPeriodModel" Items="DMP"  EditMode="DataGridEditMode.Cell" ReadOnly="false"
+
+    Bordered="true" Dense="true" EditTrigger="@(_editTriggerRowClick ? DataGridEditTrigger.OnRowClick : DataGridEditTrigger.Manual)">
+    <Columns>
+       
+        <PropertyColumn Property="x => x.Doctor.Name" Title="Doctor">
+            <EditTemplate>
+                 <MudSelect T="int" @bind-Value="context.Item.DoctorId"  Label="" >
+                    @foreach(var doctor in doctors)
+                    {
+                            <MudSelectItem T="int" Value="@doctor.Id"> @doctor.Name </MudSelectItem>
+                    }
+                    
+                 </MudSelect>
+            </EditTemplate>
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.Medical.Name" Title="Medical">
+            <EditTemplate>
+                 <MudSelect T="int" @bind-Value="context.Item.MedicalId"  Label="" >
+                    @foreach (var  medical in medicals)
+                    {
+                                        <MudSelectItem T="int" Value="@medical.Id"> @medical.Name </MudSelectItem>
+                    }
+
+                 </MudSelect>
+            </EditTemplate>
+        
+        </PropertyColumn>
+
+        <PropertyColumn Property="x => x.Peroid.Name" Title="Periode">
+            <EditTemplate>
+                 <MudSelect T="int" @bind-Value="context.Item.PeroidId"  Label="" >
+                    @foreach (var peroide in peroids)
+                    {
+                                                <MudSelectItem T="int" Value="@peroide.Id"> @peroide.Name </MudSelectItem>
+                    }
+
+                 </MudSelect>
+            </EditTemplate>
+
+        </PropertyColumn>
+
+         <PropertyColumn Property="x => x.CountBook" Title="CountBook"/>
+
+       
+    </Columns>
+</MudDataGrid>
+
+
+
+
+
+@code {
+    private IEnumerable<DoctorMedicalPeriodModel> DMP = new List<DoctorMedicalPeriodModel>();
+    private bool _readOnly;
+    private bool _isCellEditMode;
+    private List<string> _events = new();
+    private bool _editTriggerRowClick;
+
+
+    IEnumerable<DoctorModel> doctors = new List<DoctorModel>();
+    IEnumerable<MedicalModel> medicals = new List<MedicalModel>();
+    IEnumerable<PeroidModel> peroids = new List<PeroidModel>();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var getdoctors = await doctorService.GetAll();
+        var getmedical = await medicalServoce.GetAll();
+        var getpreiode = await periodeService.GetAll();
+        doctors = (getdoctors.Code == 0) ? getdoctors.Content : new List<DoctorModel>();
+        medicals = (getmedical.Code == 0) ? getmedical.Content : new List<MedicalModel>();
+        peroids = (getpreiode.Code == 0) ? getpreiode.Content : new List<PeroidModel>();
+        var result = await MDPService.GetAll();
+        DMP = (result.Code == 0) ? result.Content : new List<DoctorMedicalPeriodModel>();
+
+
+    }
+
+    // events
+    void StartedEditingItem(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CommittedItemChanges(DoctorModel item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void NavTocreate()
+    {
+        navigationManager.NavigateTo("/createDMP");
+    }
+}

@@ -36,6 +36,7 @@ namespace Infrastructure
         public DbSet<DoctorModel> doctor { get; set; }
         public DbSet<PeroidModel> periode { get; set; }
         public DbSet<MedicalModel> medical { get; set; }
+        public DbSet<DoctorMedicalPeriodModel> doctorMedicalPeriodModels { get; set; }
 
     }
 }

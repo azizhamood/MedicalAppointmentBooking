@@ -24,7 +24,7 @@ namespace Application.Futures.DoctorMedicalPeriod.Queries
         }
         public async Task<IEnumerable<DoctorMedicalPeriodModel>> Handle(GetAllDMP request, CancellationToken cancellationToken)
         {
-            return await _baseRepository.GetAll();
+            return await _baseRepository.GetAll( new []{ "Doctor", "Medical", "Peroid" });
         }
     }
 }
