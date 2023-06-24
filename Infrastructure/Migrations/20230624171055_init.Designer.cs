@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MySqlDbContex))]
-    [Migration("20230622130358_Add-periode")]
-    partial class Addperiode
+    [Migration("20230624171055_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,35 @@ namespace Infrastructure.Migrations
                     b.ToTable("category");
                 });
 
+            modelBuilder.Entity("Core.Model.DoctorMedicalPeriodModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountBook")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeroidId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("MedicalId");
+
+                    b.HasIndex("PeroidId");
+
+                    b.ToTable("doctorMedicalPeriodModels");
+                });
+
             modelBuilder.Entity("Core.Model.DoctorModel", b =>
                 {
                     b.Property<int>("Id")
@@ -57,21 +86,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("doctor");
                 });
 
+            modelBuilder.Entity("Core.Model.MedicalModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("medical");
+                });
+
             modelBuilder.Entity("Core.Model.PeroidModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeOnly>("FromDate")
+                        .HasColumnType("time(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeOnly>("ToDate")
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 
@@ -114,6 +158,33 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("user");
+                });
+
+            modelBuilder.Entity("Core.Model.DoctorMedicalPeriodModel", b =>
+                {
+                    b.HasOne("Core.Model.DoctorModel", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Model.MedicalModel", "Medical")
+                        .WithMany()
+                        .HasForeignKey("MedicalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Model.PeroidModel", "Peroid")
+                        .WithMany()
+                        .HasForeignKey("PeroidId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Medical");
+
+                    b.Navigation("Peroid");
                 });
 
             modelBuilder.Entity("Core.Model.DoctorModel", b =>
