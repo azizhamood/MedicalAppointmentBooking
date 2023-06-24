@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -15,8 +16,14 @@ builder.Services.AddScoped<IMedicalService, MedicalService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IMDPService, DMPService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped(sp => new HttpClient(new CustomHttpMessageHandler()) { BaseAddress = new Uri(builder.Configuration["ApiUri"], UriKind.Absolute) });
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddAuthorizationCore();
 
 builder.Services.AddMudServices();
 builder.Services.AddBlazoredLocalStorage();
-await builder.Build().RunAsync();
+var app =  builder.Build();
+ Application.App=app;
+
+await app.RunAsync();

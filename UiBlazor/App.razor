@@ -1,8 +1,19 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager _navigationManager
+<CascadingAuthenticationState>
+<Router AppAssembly="@typeof(App).Assembly">
+     <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <div style="margin:10px;">
+                        <h4>
+                           <NavLink href=@{"login?returnUrl="+_navigationManager.ToBaseRelativePath(_navigationManager.Uri)}>login</NavLink>
+                        </h4>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
@@ -10,3 +21,4 @@
         </LayoutView>
     </NotFound>
 </Router>
+</CascadingAuthenticationState>

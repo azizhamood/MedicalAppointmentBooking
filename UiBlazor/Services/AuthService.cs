@@ -1,4 +1,5 @@
 ﻿
+using Core.Model;
 using Newtonsoft.Json;
 using Share.DTO;
 using Share.Model;
@@ -19,12 +20,16 @@ namespace UiBlazor.Services
         }
         public async Task<ResponseModel<JwtTokenModel>> Login(UserLoginDto userLoginDto)
         {
-            return JsonConvert.DeserializeObject<ResponseModel<JwtTokenModel>>(await (await _httpClient.PostAsJsonAsync($"{_configuration["ApiUri"]}/login", userLoginDto)).Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<ResponseModel<JwtTokenModel>>(await (await _httpClient.PostAsJsonAsync($"{_configuration["ApiUri"]}/api/Auth/login", userLoginDto)).Content.ReadAsStringAsync());
         }
 
-        public Task<ResponseModel<JwtTokenModel>> Register(UserRegisterDto userRegister)
+        public  async Task<ResponseModel<JwtTokenModel>> Register(UserRegisterDto userRegister)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync($"{_configuration["ApiUri"]}/api/Auth/register", userRegister);
+
+            ResponseModel<JwtTokenModel> result = JsonConvert.DeserializeObject<ResponseModel<JwtTokenModel>>(await response.Content.ReadAsStringAsync());
+            return result;
+
         }
     }
 }

@@ -3,9 +3,11 @@ using Application.Futures.Doctor.Command;
 using Application.Futures.Doctor.Queries;
 using Application.Futures.DoctorMedicalPeriod.Command;
 using Application.Futures.DoctorMedicalPeriod.Queries;
+using Core.Constaince;
 using Core.Exceptions;
 using Core.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -23,7 +25,7 @@ namespace Api.Controllers
             _mediator=mediator;
         }
         // GET: api/<MedicalDoctorPriodeController>
-        [HttpGet]
+        [HttpGet, Authorize(Roles =$"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Get()
         {
             var reuslt = await _mediator.Send(new GetAllDMP());
@@ -38,7 +40,7 @@ namespace Api.Controllers
         }
 
         // POST api/<MedicalDoctorPriodeController>
-        [HttpPost]
+        [HttpPost, Authorize(Roles = $"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Post([FromBody] DoctorMedicalPeriodModel MDP)
         {
             try

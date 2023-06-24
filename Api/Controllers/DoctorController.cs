@@ -7,8 +7,10 @@ using Core.Constaince;
 using Core.Exceptions;
 using Core.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,9 +24,9 @@ namespace Api.Controllers
         private IMediator _mediator;
         public DoctorController(IMediator mediator) {
             _mediator= mediator;
-        }    
+        }
         // GET: api/<DoctoController>
-        [HttpGet]
+        [HttpGet, Authorize(Roles = $"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Get()
         {
             var reuslt = await _mediator.Send(new GetAllDoctors());
@@ -39,7 +41,7 @@ namespace Api.Controllers
         }
 
         // POST api/<DoctoController>
-        [HttpPost]
+        [HttpPost, Authorize(Roles = $"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Post([FromBody] DoctorModel doctor)
         {
             try

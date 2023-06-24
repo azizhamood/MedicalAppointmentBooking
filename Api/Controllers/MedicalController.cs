@@ -3,11 +3,14 @@ using Application.Futures.Doctor.Command;
 using Application.Futures.Medical.Command;
 using Application.Futures.Medical.Queries;
 using Application.Futures.Periode.Queries;
+using Core.Constaince;
 using Core.Exceptions;
 using Core.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,7 +27,7 @@ namespace Api.Controllers
             _mediator = mediator;
         }
         // GET: api/<MedicalController>
-        [HttpGet]
+        [HttpGet, Authorize(Roles = $"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Get()
         {
             var reuslt = await _mediator.Send(new GetAllMedical());
@@ -39,7 +42,7 @@ namespace Api.Controllers
         }
 
         // POST api/<MedicalController>
-        [HttpPost]
+        [HttpPost, Authorize(Roles = $"{UserRole.User},{UserRole.Admin}")]
         public async Task<ResponseModel> Post([FromBody] MedicalModel medical)
         {
             try

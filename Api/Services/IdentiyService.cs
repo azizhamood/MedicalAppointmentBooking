@@ -30,7 +30,7 @@ namespace Api.Services
           
         }
 
-        public async Task<UserDto> RegisterAsync(UserRegisterDto model, string Role)
+        public async Task<JwtTokenModel> RegisterAsync(UserRegisterDto model, string Role)
         {
             if (await _mySqlDbContex.user.FirstOrDefaultAsync(u => u.Email == model.Email) is not null)
                 throw new MABException(MABErrorCodes.USER_ALREADY_EXISTS_CODE);
@@ -60,7 +60,8 @@ namespace Api.Services
                 throw new Exception();
             }
 
-            return new UserDto() { Id = user.Id, Email = user.Email };
+            return GenerateToken(user);
+            //return new UserDto() { Id = user.Id, Email = user.Email };
         }
 
         public async Task<JwtTokenModel> Login(UserLoginDto userLoginDto)

@@ -1,5 +1,12 @@
-﻿@page "/login"
+﻿@page "/"
+@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Authorization;
 @using Share.DTO
+@inject IAuthService authService
+@inject ILocalStorageService _localStorageService
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
+
 <PageTitle>LogIn</PageTitle>
 <div class="card">
     <div class="card-body">
@@ -26,8 +33,19 @@
     </div>
 @code {
     UserLoginDto logIn = new UserLoginDto();
-    void login()
+    async Task login()
     {
+        var result = await authService.Login(logIn);
 
+        if (result.Code == 0 & result.Content != null)
+        {
+            var token = result.Content;
+            token.IssueDate = DateTime.Now;
+            await _localStorageService.SetItemAsync<Share.Model.JwtTokenModel>("accessToken", token);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            StateHasChanged();
+            _navigationManager.NavigateTo("/DashBord");
+
+        }
     }
 }

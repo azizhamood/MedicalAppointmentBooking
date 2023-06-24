@@ -1,25 +1,31 @@
-﻿@inject NavigationManager navigationManager
-
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@inject AuthenticationStateProvider _authenticationStateProvider
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
         <MudSpacer />
-      <MudLink Href="/Login">  <MudText Style="color:azure;margin:15px" >Login</MudText></MudLink>
+      <MudLink Href="/">  <MudText Style="color:azure;margin:15px" >Login</MudText></MudLink>
 
          <MudLink Href="/register">  <MudText Style="color:azure" >Register</MudText></MudLink>
+        <MudButton OnClick="Logout"> Logout </MudButton>
     </MudAppBar>
     <MudDrawer @bind-Open="@open" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">My App</MudText>
         </MudDrawerHeader>
        <MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Servers</MudNavLink>
+    <MudNavLink Href="/DashBord" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+   
     <MudNavGroup Title="Inputs" Expanded="true">
-        <MudNavLink Href="/periodeIndex"  Match="NavLinkMatch.Prefix">Period</MudNavLink>
-        <MudNavLink Href="/medicalIndex"  Match="NavLinkMatch.Prefix">Medical</MudNavLink>
-         <MudNavLink Href="/SpecializationIndex"  Match="NavLinkMatch.Prefix">Specialization</MudNavLink>
-        <MudNavLink Href="/docroeIndex"  Match="NavLinkMatch.Prefix">Doctor</MudNavLink>
-        <MudNavLink Href="/DMPIndex"  Match="NavLinkMatch.Prefix">DoctorMedicalPeriod</MudNavLink>
+        <AuthorizeView Roles="User">
+                <MudNavLink Href="/periodeIndex"  Match="NavLinkMatch.Prefix">Period</MudNavLink>
+                <MudNavLink Href="/medicalIndex"  Match="NavLinkMatch.Prefix">Medical</MudNavLink>
+                 <MudNavLink Href="/SpecializationIndex"  Match="NavLinkMatch.Prefix">Specialization</MudNavLink>
+                <MudNavLink Href="/docroeIndex"  Match="NavLinkMatch.Prefix">Doctor</MudNavLink>
+                <MudNavLink Href="/DMPIndex"  Match="NavLinkMatch.Prefix">DoctorMedicalPeriod</MudNavLink>
+        </AuthorizeView>
     </MudNavGroup>
     <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
 </MudNavMenu>
@@ -39,5 +45,12 @@
     void NavToRegister()
     {
         navigationManager.NavigateTo("Login");
+    }
+
+    async Task Logout()
+    {
+        await _localStorageService.RemoveItemAsync("accessToken");
+        await _authenticationStateProvider.GetAuthenticationStateAsync();
+        navigationManager.NavigateTo("/");
     }
 }

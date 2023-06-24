@@ -1,5 +1,10 @@
 ﻿@page "/register"
-S
+@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject IAuthService authService
+@inject ILocalStorageService _localStorageService
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
 <PageTitle>Register</PageTitle>
 <div class="card">
     <div class="card-body">
@@ -17,6 +22,14 @@ S
                     UserName:
                 </label>
                 <InputText @bind-Value="registerinfo.UserName" class="form-control"></InputText>
+
+            </div>
+            <br />
+             <div class="form-group">
+                <label>
+                    PhoneNumber:
+                </label>
+                <InputText @bind-Value="registerinfo.PhoneNumber" class="form-control"></InputText>
 
             </div>
             <br />
@@ -42,8 +55,19 @@ S
 </div>
 @code {
     UserRegisterDto registerinfo = new UserRegisterDto();
-    void registeration()
+    async Task registeration()
     {
+        var result = await authService.Register(registerinfo);
 
+        if (result.Code == 0 & result.Content!=null)
+        {
+            var token = result.Content;
+            token.IssueDate = DateTime.Now;
+            await _localStorageService.SetItemAsync<Share.Model.JwtTokenModel>("accessToken",token );
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            StateHasChanged();
+            _navigationManager.NavigateTo("/");
+
+        }
     }
 }
